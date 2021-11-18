@@ -27,11 +27,14 @@ final class EnvironmentServiceProvider implements ServiceProvider
                 $dotenv = Dotenv::createImmutable(
                     $directories->get(Directories::ROOT)
                 );
+
+                $variables = new EnvironmentVariables($dotenv->load());
+
                 $dotenv->required(
                     $config->requiredFields()
                 );
 
-                return new EnvironmentVariables($dotenv->load());
+                return $variables;
             },
             EnvironmentConfig::class => EnvironmentConfig::withDefaults([
                 EnvironmentVariables::ENVIRONMENT_KEY_NAME
