@@ -1,0 +1,43 @@
+{
+    "name": "zorachka/environment",
+    "description": "Zorachka Environment",
+    "keywords": [
+        "zorachka",
+        "environment"
+    ],
+    "homepage": "https://github.com/zorachka/environment",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Siarhei Bautrukevich",
+            "email": "hello@bautrukevich.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "vlucas/phpdotenv": "^5.4"
+    },
+    "suggest": {
+        "zorachka/container": "For EnvironmentServiceProvider",
+        "zorachka/directories": "For EnvironmentServiceProvider"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zorachka\\Framework\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Zorachka\\Framework\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
