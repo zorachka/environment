@@ -12,7 +12,7 @@ interface Environment
      * @param mixed $default
      * @return mixed
      */
-    public function get(string $name, $default = null): mixed;
+    public function get(string $name, mixed $default = null): mixed;
 
     /**
      * Return environment name.
