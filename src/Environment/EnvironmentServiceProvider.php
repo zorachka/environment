@@ -29,17 +29,20 @@ final class EnvironmentServiceProvider implements ServiceProvider
                     $directories->get(DirectoryAlias::ROOT)
                 );
 
-                $variables = new EnvironmentVariables($dotenv->load());
-
-                $dotenv->required(
-                    $config->requiredFields()
+                $environment = new DotEnvironment(
+                    $config->environmentName(),
+                    $dotenv->load(),
                 );
 
-                return $variables;
+                if (!\empty($config->requiredFields())) {
+                    $dotenv->required(
+                        $config->requiredFields()
+                    );
+                }
+
+                return $environment;
             },
-            EnvironmentConfig::class => fn() => EnvironmentConfig::withDefaults([
-                EnvironmentVariables::ENVIRONMENT_KEY_NAME
-            ]),
+            EnvironmentConfig::class => fn() => EnvironmentConfig::withDefaults(),
         ];
     }
 
