@@ -8,6 +8,7 @@ use Dotenv\Dotenv;
 use Psr\Container\ContainerInterface;
 use Zorachka\Framework\Container\ServiceProvider;
 use Zorachka\Framework\Directories\Directories;
+use Zorachka\Framework\Directories\DirectoryAlias;
 
 final class EnvironmentServiceProvider implements ServiceProvider
 {
@@ -25,20 +26,23 @@ final class EnvironmentServiceProvider implements ServiceProvider
                 $directories = $container->get(Directories::class);
 
                 $dotenv = Dotenv::createImmutable(
-                    $directories->get(Directories::ROOT)
+                    $directories->get(DirectoryAlias::ROOT)
                 );
 
-                $variables = new EnvironmentVariables($dotenv->load());
-
-                $dotenv->required(
-                    $config->requiredFields()
+                $environment = new DotEnvironment(
+                    $config->environmentName(),
+                    $dotenv->load(),
                 );
 
-                return $variables;
+                if (!\empty($config->requiredFields())) {
+                    $dotenv->required(
+                        $config->requiredFields()
+                    );
+                }
+
+                return $environment;
             },
-            EnvironmentConfig::class => EnvironmentConfig::withDefaults([
-                EnvironmentVariables::ENVIRONMENT_KEY_NAME
-            ]),
+            EnvironmentConfig::class => fn() => EnvironmentConfig::withDefaults(),
         ];
     }
 
