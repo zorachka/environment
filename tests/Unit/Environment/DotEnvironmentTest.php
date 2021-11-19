@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 use Zorachka\Framework\Environment\DotEnvironment;
 
+test('EnvironmentVariables throws exception if environment name is empty', function () {
+    new DotEnvironment(
+        name: '',
+        values: [
+            'KEY' => 'value',
+        ],
+    );
+})->throws(InvalidArgumentException::class);
+
 test('EnvironmentVariables throws exception if array of values is empty', function () {
     new DotEnvironment(
         name: 'development',
