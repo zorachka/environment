@@ -8,30 +8,50 @@ use Webmozart\Assert\Assert;
 
 final class EnvironmentConfig
 {
-    private array $requiredFields;
+    private function __construct(
+        private string $environmentName,
+        private array $requiredFields,
+    ) {}
 
-    private function __construct(array $requiredFields)
-    {
-        $this->requiredFields = $requiredFields;
+    public static function withDefaults(
+        string $environmentName = EnvironmentName::PRODUCTION,
+        array $requiredFields = [],
+    ) {
+        Assert::notEmpty($environmentName);
+
+        return new self($environmentName, $requiredFields);
     }
 
-    public static function withDefaults(array $requiredFields = [])
+    public function withRequiredField(string $name): self
     {
-        return new self($requiredFields);
-    }
-
-    public function withRequiredField(string $key): self
-    {
-        Assert::notEmpty($key);
+        Assert::notEmpty($name);
 
         $new = clone $this;
-        $new->requiredFields[] = $key;
+        $new->requiredFields[] = $name;
 
         return $new;
     }
 
-    public function requiredFields(): array
+    public function requiredFields(): ?array
     {
         return $this->requiredFields;
+    }
+
+    public function withEnvironmentName(string $environmentName): self
+    {
+        Assert::notEmpty($environmentName);
+
+        $new = clone $this;
+        $new->environmentName = $environmentName;
+
+        return $new;
+    }
+
+    /**
+     * @return string
+     */
+    public function environmentName(): string
+    {
+        return $this->environmentName;
     }
 }

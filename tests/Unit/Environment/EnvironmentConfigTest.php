@@ -10,12 +10,12 @@ test('EnvironmentConfig should be able to be created with defaults', function ()
 
     expect($requiredFields)->toBeArray();
     expect($requiredFields)->toBeEmpty();
+    expect($defaultConfig->environmentName())->toBe('production');
 });
 
 test('EnvironmentConfig throws exception when with required field key is empty', function () {
     $defaultConfig = EnvironmentConfig::withDefaults();
-
-    $newConfig = $defaultConfig->withRequiredField('');
+    $defaultConfig->withRequiredField('');
 })->throws(InvalidArgumentException::class);
 
 test('EnvironmentConfig should be able to add required field', function () {
