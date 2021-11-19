@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zorachka\Framework\Environment;
 
+use Webmozart\Assert\Assert;
+
 final class EnvironmentConfig
 {
     private array $requiredFields;
@@ -18,10 +20,12 @@ final class EnvironmentConfig
         return new self($requiredFields);
     }
 
-    public function withRequiredFields(array $requiredFields)
+    public function withRequiredField(string $key): self
     {
+        Assert::notEmpty($key);
+
         $new = clone $this;
-        $new->requiredFields = $requiredFields;
+        $new->requiredFields[] = $key;
 
         return $new;
     }
