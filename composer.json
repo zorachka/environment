@@ -17,7 +17,7 @@
     "require": {
         "php": "^8.0",
         "vlucas/phpdotenv": "^5.4",
-        "zorachka/container": "^1.0",
+        "zorachka/container": "^2.0",
         "zorachka/directories": "dev-main"
     },
     "require-dev": {
