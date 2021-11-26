@@ -34,7 +34,7 @@ final class EnvironmentServiceProvider implements ServiceProvider
                     $dotenv->load(),
                 );
 
-                if (!\empty($config->requiredFields())) {
+                if (!empty($config->requiredFields())) {
                     $dotenv->required(
                         $config->requiredFields()
                     );
