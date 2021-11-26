@@ -18,7 +18,7 @@ final class EnvironmentServiceProvider implements ServiceProvider
     public static function getDefinitions(): array
     {
         return [
-            Environment::class => static function(ContainerInterface $container) {
+            Environment::class => static function(ContainerInterface $container): Environment {
                 /** @var EnvironmentConfig $config */
                 $config = $container->get(EnvironmentConfig::class);
 
@@ -34,7 +34,7 @@ final class EnvironmentServiceProvider implements ServiceProvider
                     $dotenv->load(),
                 );
 
-                if (!\empty($config->requiredFields())) {
+                if (!empty($config->requiredFields())) {
                     $dotenv->required(
                         $config->requiredFields()
                     );
@@ -42,7 +42,7 @@ final class EnvironmentServiceProvider implements ServiceProvider
 
                 return $environment;
             },
-            EnvironmentConfig::class => fn() => EnvironmentConfig::withDefaults(),
+            EnvironmentConfig::class => fn(): EnvironmentConfig => EnvironmentConfig::withDefaults(),
         ];
     }
 
