@@ -6,7 +6,7 @@ namespace Zorachka\Framework\Environment;
 
 use Dotenv\Dotenv;
 use Psr\Container\ContainerInterface;
-use Zorachka\Framework\Container\ServiceProvider;
+use Zorachka\Container\ServiceProvider;
 use Zorachka\Framework\Directories\Directories;
 use Zorachka\Framework\Directories\DirectoryAlias;
 
