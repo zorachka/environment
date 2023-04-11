@@ -2,21 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Zorachka\Framework\Environment;
+namespace Zorachka\Environment;
 
 use Webmozart\Assert\Assert;
 
 final class EnvironmentConfig
 {
     private function __construct(
-        private string $environmentName,
+        private EnvironmentName $environmentName,
+        /**
+         * @var array<string>
+         */
         private array $requiredFields,
-    ) {}
-
-    public static function withDefaults(
-        string $environmentName = EnvironmentName::PRODUCTION,
-        array $requiredFields = [],
     ) {
+    }
+
+    /**
+     * @param array<string> $requiredFields
+     * @return static
+     */
+    public static function withDefaults(
+        EnvironmentName $environmentName = EnvironmentName::PRODUCTION,
+        array $requiredFields = [],
+    ): self {
         Assert::notEmpty($environmentName);
 
         return new self($environmentName, $requiredFields);
@@ -32,12 +40,15 @@ final class EnvironmentConfig
         return $new;
     }
 
+    /**
+     * @return string[]|null
+     */
     public function requiredFields(): ?array
     {
         return $this->requiredFields;
     }
 
-    public function withEnvironmentName(string $environmentName): self
+    public function withEnvironmentName(EnvironmentName $environmentName): self
     {
         Assert::notEmpty($environmentName);
 
@@ -47,10 +58,7 @@ final class EnvironmentConfig
         return $new;
     }
 
-    /**
-     * @return string
-     */
-    public function environmentName(): string
+    public function environmentName(): EnvironmentName
     {
         return $this->environmentName;
     }

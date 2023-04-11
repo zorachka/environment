@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Zorachka\Framework\Environment;
+namespace Zorachka\Environment;
 
 use Webmozart\Assert\Assert;
+
 use function mb_strtolower;
 
 final class DotEnvironment implements Environment
@@ -18,8 +19,14 @@ final class DotEnvironment implements Environment
     ];
 
     private string $name;
+    /**
+     * @var array<int|string, bool|int|string|null>
+     */
     private array $values = [];
 
+    /**
+     * @param array<int|string, bool|int|string|null> $values
+     */
     public function __construct(
         string $name,
         array $values,
@@ -33,13 +40,9 @@ final class DotEnvironment implements Environment
         }
     }
 
-    /**
-     * @param mixed $value
-     * @return mixed
-     */
-    private function normalize(mixed $value): mixed
+    private function normalize(bool|int|null|string $value): bool|int|null|string
     {
-        $alias = mb_strtolower($value);
+        $alias = mb_strtolower((string)$value);
         if (isset(self::VALUE_MAP[$alias])) {
             return self::VALUE_MAP[$alias];
         }
@@ -47,18 +50,15 @@ final class DotEnvironment implements Environment
         return $value;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function name(): string
     {
         return $this->name;
     }
 
     /**
-     * @inheritDoc
+     * @param bool|int|string|null $default
      */
-    public function get(string $name, mixed $default = null): mixed
+    public function get(string $name, $default = null): bool|int|null|string
     {
         if (isset($this->values[$name])) {
             return $this->values[$name];
