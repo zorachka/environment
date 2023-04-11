@@ -2,23 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Zorachka\Framework\Environment;
+namespace Zorachka\Environment;
 
 use Dotenv\Dotenv;
 use Psr\Container\ContainerInterface;
 use Zorachka\Container\ServiceProvider;
-use Zorachka\Framework\Directories\Directories;
-use Zorachka\Framework\Directories\DirectoryAlias;
+use Zorachka\Directories\Directories;
+use Zorachka\Directories\DirectoryAlias;
 
 final class EnvironmentServiceProvider implements ServiceProvider
 {
-    /**
-     * @inheritDoc
-     */
     public static function getDefinitions(): array
     {
         return [
-            Environment::class => static function(ContainerInterface $container) {
+            Environment::class => static function (ContainerInterface $container) {
                 /** @var EnvironmentConfig $config */
                 $config = $container->get(EnvironmentConfig::class);
 
@@ -30,11 +27,11 @@ final class EnvironmentServiceProvider implements ServiceProvider
                 );
 
                 $environment = new DotEnvironment(
-                    $config->environmentName(),
+                    $config->environmentName()->value,
                     $dotenv->load(),
                 );
 
-                if (!\empty($config->requiredFields())) {
+                if (!empty($config->requiredFields())) {
                     $dotenv->required(
                         $config->requiredFields()
                     );
@@ -42,13 +39,10 @@ final class EnvironmentServiceProvider implements ServiceProvider
 
                 return $environment;
             },
-            EnvironmentConfig::class => fn() => EnvironmentConfig::withDefaults(),
+            EnvironmentConfig::class => static fn () => EnvironmentConfig::withDefaults(),
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
     public static function getExtensions(): array
     {
         return [];
