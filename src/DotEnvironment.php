@@ -58,7 +58,7 @@ final class DotEnvironment implements Environment
     /**
      * @param bool|int|string|null $default
      */
-    public function get(string $name, $default = null): bool|int|null|string
+    public function get(string $name, bool|int|null|string $default = null): bool|int|null|string
     {
         if (isset($this->values[$name])) {
             return $this->values[$name];
