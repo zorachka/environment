@@ -16,13 +16,19 @@ final class EnvironmentNameTest extends TestCase
      */
     public function shouldContainValues(): void
     {
-        Assert::assertIsString(EnvironmentName::PRODUCTION->value);
-        Assert::assertNotEmpty(EnvironmentName::PRODUCTION->value);
+        $production = EnvironmentName::PRODUCTION->value;
+        Assert::assertIsString($production);
+        Assert::assertEquals('prod', $production);
+        Assert::assertNotEmpty($production);
 
-        Assert::assertIsString(EnvironmentName::DEVELOPMENT->value);
-        Assert::assertNotEmpty(EnvironmentName::DEVELOPMENT->value);
+        $development = EnvironmentName::DEVELOPMENT->value;
+        Assert::assertIsString($development);
+        Assert::assertEquals('dev', $development);
+        Assert::assertNotEmpty($development);
 
-        Assert::assertIsString(EnvironmentName::TEST->value);
-        Assert::assertNotEmpty(EnvironmentName::TEST->value);
+        $test = EnvironmentName::TEST->value;
+        Assert::assertIsString($test);
+        Assert::assertEquals('test', $test);
+        Assert::assertNotEmpty($test);
     }
 }
