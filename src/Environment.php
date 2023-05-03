@@ -13,7 +13,7 @@ interface Environment
 
     /**
      * Get environment variable value.
-     * @param bool|int|string|null $default
+     * @param bool|int|string $default
      */
-    public function get(string $name, bool|int|null|string $default = null): bool|int|null|string;
+    public function get(string $name, bool|int|null|string $default = null): bool|int|string;
 }

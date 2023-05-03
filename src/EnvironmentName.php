@@ -6,7 +6,7 @@ namespace Zorachka\Environment;
 
 enum EnvironmentName: string
 {
-    case PRODUCTION = 'production';
-    case DEVELOPMENT = 'development';
+    case PRODUCTION = 'prod';
+    case DEVELOPMENT = 'dev';
     case TEST = 'test';
 }
