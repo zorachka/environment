@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Zorachka\Environment;
 
-use Dotenv\Dotenv;
 use Psr\Container\ContainerInterface;
+use RuntimeException;
 use Zorachka\Container\ServiceProvider;
-use Zorachka\Directories\Directories;
-use Zorachka\Directories\DirectoryAlias;
 
 final class EnvironmentServiceProvider implements ServiceProvider
 {
@@ -19,22 +17,25 @@ final class EnvironmentServiceProvider implements ServiceProvider
                 /** @var EnvironmentConfig $config */
                 $config = $container->get(EnvironmentConfig::class);
 
-                /** @var Directories $directories */
-                $directories = $container->get(Directories::class);
-
-                $dotenv = Dotenv::createImmutable(
-                    $directories->get(DirectoryAlias::ROOT)
-                );
-
-                $environment = new DotEnvironment(
+                $environment = new EnvironmentValues(
                     $config->environmentName()->value,
-                    $dotenv->load(),
                 );
 
-                if (!empty($config->requiredFields())) {
-                    $dotenv->required(
-                        $config->requiredFields()
-                    );
+                if ($config->requiredFields()) {
+                    $requiredFields = [];
+                    foreach ($config->requiredFields() as $requiredField) {
+                        $isExists = $environment->get($requiredField);
+
+                        if (!$isExists) {
+                            $requiredFields[] = $requiredField;
+                        }
+                    }
+
+                    if (!empty($requiredFields)) {
+                        $fieldsToDefined = \implode(', ', $requiredFields);
+
+                        throw new RuntimeException('These fields must be defined: ' . $fieldsToDefined);
+                    }
                 }
 
                 return $environment;
