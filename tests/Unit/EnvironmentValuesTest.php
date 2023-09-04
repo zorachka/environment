@@ -2,8 +2,12 @@
 
 declare(strict_types=1);
 
+namespace Zorachka\Environment\Tests\Unit;
+
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
+use Zorachka\Environment\EnvironmentName;
 use Zorachka\Environment\EnvironmentValues;
 
 /**
@@ -14,24 +18,12 @@ final class EnvironmentValuesTest extends TestCase
     /**
      * @test
      */
-    public function throwsExceptionIfEnvironmentNameIsEmpty(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        new EnvironmentValues(
-            name: '',
-        );
-    }
-
-    /**
-     * @test
-     */
     public function shouldReturnCorrectValues(): void
     {
         putenv("KEY=value");
 
         $environment = new EnvironmentValues(
-            name: 'dev',
+            name: EnvironmentName::DEVELOPMENT,
         );
 
         Assert::assertEquals('value', $environment->get('KEY'));
@@ -43,11 +35,11 @@ final class EnvironmentValuesTest extends TestCase
      */
     public function shouldReadValueFromFileAndTrimContent(): void
     {
-        $filePath = implode(DIRECTORY_SEPARATOR, [dirname(__FILE__), 'db_password']);
+        $filePath = implode(DIRECTORY_SEPARATOR, [dirname(__FILE__), '..', 'Datasets', 'db_password']);
         putenv("DB_PASSWORD_FILE=" . $filePath);
 
         $environment = new EnvironmentValues(
-            name: 'dev',
+            name: EnvironmentName::DEVELOPMENT,
         );
 
         Assert::assertEquals('secret', $environment->get('DB_PASSWORD'));
@@ -59,7 +51,7 @@ final class EnvironmentValuesTest extends TestCase
     public function shouldThrowExceptionIfValueDoesntExists(): void
     {
         $environment = new EnvironmentValues(
-            name: 'dev',
+            name: EnvironmentName::DEVELOPMENT,
         );
 
         $this->expectException(RuntimeException::class);
@@ -79,7 +71,7 @@ final class EnvironmentValuesTest extends TestCase
         putenv("EMPTY=");
 
         $environment = new EnvironmentValues(
-            name: 'dev',
+            name: EnvironmentName::DEVELOPMENT,
         );
 
         Assert::assertTrue($environment->get('BOOLEAN_TRUE'));
@@ -92,12 +84,24 @@ final class EnvironmentValuesTest extends TestCase
     /**
      * @test
      */
-    public function shouldHaveAName(): void
+    public function shouldHaveANameWithValue(): void
     {
         $environment = new EnvironmentValues(
-            name: 'dev',
+            name: EnvironmentName::DEVELOPMENT,
         );
 
-        Assert::assertEquals('dev', $environment->name());
+        Assert::assertEquals('dev', $environment->name()->value);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldHaveAGivenName(): void
+    {
+        $environment = new EnvironmentValues(
+            name: EnvironmentName::DEVELOPMENT,
+        );
+
+        Assert::assertTrue($environment->isA(EnvironmentName::DEVELOPMENT));
     }
 }

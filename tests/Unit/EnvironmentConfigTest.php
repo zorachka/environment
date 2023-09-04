@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+namespace Zorachka\Environment\Tests\Unit;
+
+use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Zorachka\Environment\EnvironmentConfig;

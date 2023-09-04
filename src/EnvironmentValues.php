@@ -6,8 +6,6 @@ namespace Zorachka\Environment;
 
 use RuntimeException;
 
-use Webmozart\Assert\Assert;
-
 use function file_exists;
 use function mb_strtolower;
 use function trim;
@@ -22,14 +20,9 @@ final class EnvironmentValues implements Environment
         'empty' => '',
     ];
 
-    private string $name;
-
     public function __construct(
-        string $name,
+        private readonly EnvironmentName $name,
     ) {
-        Assert::notEmpty($name);
-
-        $this->name = $name;
     }
 
     private function normalize(bool|int|string $value): bool|int|string
@@ -42,7 +35,7 @@ final class EnvironmentValues implements Environment
         return $value;
     }
 
-    public function name(): string
+    public function name(): EnvironmentName
     {
         return $this->name;
     }
@@ -74,5 +67,10 @@ final class EnvironmentValues implements Environment
         }
 
         throw new RuntimeException('Undefined env ' . $name);
+    }
+
+    public function isA(EnvironmentName $environmentName): bool
+    {
+        return $this->name->value === $environmentName->value;
     }
 }
