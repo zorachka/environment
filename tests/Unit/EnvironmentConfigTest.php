@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Zorachka\Environment\EnvironmentConfig;
-use Zorachka\Environment\EnvironmentName;
 
 /**
  * @internal
@@ -25,7 +24,6 @@ final class EnvironmentConfigTest extends TestCase
 
         Assert::assertIsArray($requiredFields);
         Assert::assertEmpty($requiredFields);
-        Assert::assertEquals(EnvironmentName::PRODUCTION, $defaultConfig->environmentName());
     }
 
     /**

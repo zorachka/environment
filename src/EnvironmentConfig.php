@@ -9,7 +9,6 @@ use Webmozart\Assert\Assert;
 final class EnvironmentConfig
 {
     private function __construct(
-        private EnvironmentName $environmentName,
         /**
          * @var array<string>
          */
@@ -22,12 +21,9 @@ final class EnvironmentConfig
      * @return static
      */
     public static function withDefaults(
-        EnvironmentName $environmentName = EnvironmentName::PRODUCTION,
         array $requiredFields = [],
     ): self {
-        Assert::notEmpty($environmentName);
-
-        return new self($environmentName, $requiredFields);
+        return new self($requiredFields);
     }
 
     public function withRequiredField(string $name): self
@@ -46,20 +42,5 @@ final class EnvironmentConfig
     public function requiredFields(): ?array
     {
         return $this->requiredFields;
-    }
-
-    public function withEnvironmentName(EnvironmentName $environmentName): self
-    {
-        Assert::notEmpty($environmentName);
-
-        $new = clone $this;
-        $new->environmentName = $environmentName;
-
-        return $new;
-    }
-
-    public function environmentName(): EnvironmentName
-    {
-        return $this->environmentName;
     }
 }

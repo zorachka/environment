@@ -7,7 +7,6 @@ namespace Zorachka\Environment\Tests\Unit;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Zorachka\Environment\EnvironmentName;
 use Zorachka\Environment\EnvironmentValues;
 
 /**
@@ -22,9 +21,7 @@ final class EnvironmentValuesTest extends TestCase
     {
         putenv("KEY=value");
 
-        $environment = new EnvironmentValues(
-            name: EnvironmentName::DEVELOPMENT,
-        );
+        $environment = new EnvironmentValues();
 
         Assert::assertEquals('value', $environment->get('KEY'));
         Assert::assertEquals('default', $environment->get('KEY_NOT_EXISTS_WITH_DEFAULT', 'default'));
@@ -38,9 +35,7 @@ final class EnvironmentValuesTest extends TestCase
         $filePath = implode(DIRECTORY_SEPARATOR, [dirname(__FILE__), '..', 'Datasets', 'db_password']);
         putenv("DB_PASSWORD_FILE=" . $filePath);
 
-        $environment = new EnvironmentValues(
-            name: EnvironmentName::DEVELOPMENT,
-        );
+        $environment = new EnvironmentValues();
 
         Assert::assertEquals('secret', $environment->get('DB_PASSWORD'));
     }
@@ -50,9 +45,7 @@ final class EnvironmentValuesTest extends TestCase
      */
     public function shouldThrowExceptionIfValueDoesntExists(): void
     {
-        $environment = new EnvironmentValues(
-            name: EnvironmentName::DEVELOPMENT,
-        );
+        $environment = new EnvironmentValues();
 
         $this->expectException(RuntimeException::class);
         /* @phpstan-ignore-next-line */
@@ -70,38 +63,12 @@ final class EnvironmentValuesTest extends TestCase
         putenv("BOOLEAN_(FALSE)=(false)");
         putenv("EMPTY=");
 
-        $environment = new EnvironmentValues(
-            name: EnvironmentName::DEVELOPMENT,
-        );
+        $environment = new EnvironmentValues();
 
         Assert::assertTrue($environment->get('BOOLEAN_TRUE'));
         Assert::assertTrue($environment->get('BOOLEAN_(TRUE)'));
         Assert::assertFalse($environment->get('BOOLEAN_FALSE'));
         Assert::assertFalse($environment->get('BOOLEAN_(FALSE)'));
         Assert::assertEmpty($environment->get('EMPTY'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldHaveANameWithValue(): void
-    {
-        $environment = new EnvironmentValues(
-            name: EnvironmentName::DEVELOPMENT,
-        );
-
-        Assert::assertEquals('dev', $environment->name()->value);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldHaveAGivenName(): void
-    {
-        $environment = new EnvironmentValues(
-            name: EnvironmentName::DEVELOPMENT,
-        );
-
-        Assert::assertTrue($environment->isA(EnvironmentName::DEVELOPMENT));
     }
 }

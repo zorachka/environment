@@ -6,6 +6,7 @@ namespace Zorachka\Environment\Tests\Unit;
 
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use Zorachka\Environment\CurrentEnvironment;
 use Zorachka\Environment\Environment;
 use Zorachka\Environment\EnvironmentConfig;
 use Zorachka\Environment\EnvironmentServiceProvider;
@@ -22,6 +23,7 @@ final class EnvironmentServiceProviderTest extends TestCase
     {
         Assert::assertEquals([
             Environment::class,
+            CurrentEnvironment::class,
             EnvironmentConfig::class,
         ], array_keys(EnvironmentServiceProvider::getDefinitions()));
     }

@@ -17,9 +17,7 @@ final class EnvironmentServiceProvider implements ServiceProvider
                 /** @var EnvironmentConfig $config */
                 $config = $container->get(EnvironmentConfig::class);
 
-                $environment = new EnvironmentValues(
-                    $config->environmentName(),
-                );
+                $environment = new EnvironmentValues();
 
                 if ($config->requiredFields()) {
                     $requiredFields = [];
@@ -40,6 +38,7 @@ final class EnvironmentServiceProvider implements ServiceProvider
 
                 return $environment;
             },
+            CurrentEnvironment::class => static fn () => new CurrentEnvironment(EnvironmentName::PRODUCTION),
             EnvironmentConfig::class => static fn () => EnvironmentConfig::withDefaults(),
         ];
     }

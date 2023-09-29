@@ -20,11 +20,6 @@ final class EnvironmentValues implements Environment
         'empty' => '',
     ];
 
-    public function __construct(
-        private readonly EnvironmentName $name,
-    ) {
-    }
-
     private function normalize(bool|int|string $value): bool|int|string
     {
         $alias = mb_strtolower((string)$value);
@@ -35,14 +30,6 @@ final class EnvironmentValues implements Environment
         return $value;
     }
 
-    public function name(): EnvironmentName
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param bool|int|string|null $default
-     */
     public function get(string $name, bool|int|null|string $default = null): bool|int|string
     {
         $value = getenv($name);
@@ -67,10 +54,5 @@ final class EnvironmentValues implements Environment
         }
 
         throw new RuntimeException('Undefined env ' . $name);
-    }
-
-    public function isA(EnvironmentName $environmentName): bool
-    {
-        return $this->name->value === $environmentName->value;
     }
 }
