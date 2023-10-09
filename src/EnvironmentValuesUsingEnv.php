@@ -10,7 +10,7 @@ use function file_exists;
 use function mb_strtolower;
 use function trim;
 
-final class EnvironmentValues implements Environment
+final class EnvironmentValuesUsingEnv implements Environment
 {
     private const VALUE_MAP = [
         'true' => true,
@@ -32,13 +32,13 @@ final class EnvironmentValues implements Environment
 
     public function get(string $name, bool|int|null|string $default = null): bool|int|string
     {
-        $value = getenv($name);
+        $value = $_ENV[$name] ?? null;
 
-        if ($value !== false) {
+        if ($value !== null) {
             return $this->normalize($value);
         }
 
-        $filePath = getenv($name . '_FILE');
+        $filePath = $_ENV[$name . '_FILE'];
 
         if ($filePath !== false) {
             $fileExists = file_exists($filePath);

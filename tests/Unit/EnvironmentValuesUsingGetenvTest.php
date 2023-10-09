@@ -7,12 +7,12 @@ namespace Zorachka\Environment\Tests\Unit;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Zorachka\Environment\EnvironmentValues;
+use Zorachka\Environment\EnvironmentValuesUsingGetenv;
 
 /**
  * @internal
  */
-final class EnvironmentValuesTest extends TestCase
+final class EnvironmentValuesUsingGetenvTest extends TestCase
 {
     /**
      * @test
@@ -21,7 +21,7 @@ final class EnvironmentValuesTest extends TestCase
     {
         putenv("KEY=value");
 
-        $environment = new EnvironmentValues();
+        $environment = new EnvironmentValuesUsingGetenv();
 
         Assert::assertEquals('value', $environment->get('KEY'));
         Assert::assertEquals('default', $environment->get('KEY_NOT_EXISTS_WITH_DEFAULT', 'default'));
@@ -35,7 +35,7 @@ final class EnvironmentValuesTest extends TestCase
         $filePath = implode(DIRECTORY_SEPARATOR, [dirname(__FILE__), '..', 'Datasets', 'db_password']);
         putenv("DB_PASSWORD_FILE=" . $filePath);
 
-        $environment = new EnvironmentValues();
+        $environment = new EnvironmentValuesUsingGetenv();
 
         Assert::assertEquals('secret', $environment->get('DB_PASSWORD'));
     }
@@ -45,7 +45,7 @@ final class EnvironmentValuesTest extends TestCase
      */
     public function shouldThrowExceptionIfValueDoesntExists(): void
     {
-        $environment = new EnvironmentValues();
+        $environment = new EnvironmentValuesUsingGetenv();
 
         $this->expectException(RuntimeException::class);
         /* @phpstan-ignore-next-line */
@@ -63,7 +63,7 @@ final class EnvironmentValuesTest extends TestCase
         putenv("BOOLEAN_(FALSE)=(false)");
         putenv("EMPTY=");
 
-        $environment = new EnvironmentValues();
+        $environment = new EnvironmentValuesUsingGetenv();
 
         Assert::assertTrue($environment->get('BOOLEAN_TRUE'));
         Assert::assertTrue($environment->get('BOOLEAN_(TRUE)'));

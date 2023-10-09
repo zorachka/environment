@@ -17,7 +17,7 @@ final class EnvironmentServiceProvider implements ServiceProvider
                 /** @var EnvironmentConfig $config */
                 $config = $container->get(EnvironmentConfig::class);
 
-                $environment = new EnvironmentValues();
+                $environment = new EnvironmentValuesUsingEnv();
 
                 if ($config->requiredFields()) {
                     $requiredFields = [];
