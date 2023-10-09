@@ -7,6 +7,7 @@ namespace Zorachka\Environment;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Zorachka\Container\ServiceProvider;
+use Zorachka\Directories\Directories;
 
 final class EnvironmentServiceProvider implements ServiceProvider
 {
@@ -16,8 +17,10 @@ final class EnvironmentServiceProvider implements ServiceProvider
             Environment::class => static function (ContainerInterface $container) {
                 /** @var EnvironmentConfig $config */
                 $config = $container->get(EnvironmentConfig::class);
+                /** @var Directories $directories */
+                $directories = $container->get(Directories::class);
 
-                $environment = new EnvironmentValuesUsingEnv();
+                $environment = new EnvironmentValuesUsingEnv($directories);
 
                 if ($config->requiredFields()) {
                     $requiredFields = [];
